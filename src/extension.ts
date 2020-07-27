@@ -1,27 +1,43 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as FileOps from './fileOps';
+import * as Note from './note'
+
 
 // this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "rapidcap" is now active!');
+	let disposable = vscode.commands.registerCommand('rapidcap.addnote', () => {
+		let questionOptions: vscode.InputBoxOptions = {
+			prompt: "Question"
+		}
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('rapidcap.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
+		let answerOptions: vscode.InputBoxOptions = {
+			prompt: "Answer"
+		}
+		
+		let question: string, answer: string;
+		let ops = new FileOps.FileOps('test.txt');
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from RapidCap!');
+		vscode.window.showInputBox(questionOptions).then(value => {
+			if (!value) return;
+			question = value;
+			vscode.window.showInputBox(answerOptions).then(value => {
+				if (!value) return;
+				answer = value;
+
+				let newNote = new Note.Note(question, answer);		
+				ops.append(newNote);
+
+				let fileContents = ops.parse();
+				console.dir(fileContents);
+			});
+		});
+
+
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() {}

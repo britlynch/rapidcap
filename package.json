@@ -10,16 +10,41 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:rapidcap.helloWorld"
+		"onCommand:rapidcap.addnote"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "rapidcap.helloWorld",
-				"title": "Hello World"
+				"command": "rapidcap.addnote",
+				"title": "Add Note"
 			}
-		]
+		],
+		"keybindings": [
+			{
+				"key": "ctrl+shift+r",
+				"command": "rapidcap.addnote"
+			}
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "rapidcap-sidebar",
+					"title": "RapidCap Notes",
+					"icon": "./icons8-visual-studio-code-32.png"
+				}
+			]
+		},
+		"views": {
+			"rapidcap-sidebar": [
+			{
+				"id": "rapidcap-notes",
+				"name": "RapidCap Notes",
+				"icon": "./icons8-visual-studio-code-32.png",
+				"contextualTitle": "RapidCap"
+			}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
